@@ -5,13 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "model-printer"
 version = "0.1.0"
-description = "Inspect PyTorch .pth or NumPy .npz checkpoints and export compact model architecture diagrams to draw.io."
+description = "Inspect local or Hugging Face model checkpoints and export compact model architecture diagrams to draw.io."
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
   { name = "Lcollection" }
 ]
 dependencies = [
+  "huggingface-hub>=0.24.5",
   "numpy>=1.23",
   "rich>=13"
 ]

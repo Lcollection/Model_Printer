@@ -8,6 +8,7 @@ from model_printer.tui import (
     collect_default_expanded_paths,
     execute_welcome_command,
     flatten_visible_nodes,
+    is_url_text,
     scroll_start,
 )
 
@@ -60,6 +61,18 @@ def test_welcome_open_command_returns_checkpoint_path():
     assert result.checkpoint_path.as_posix().endswith("demo/model.npz")
 
 
+def test_welcome_open_command_keeps_url_as_text():
+    state = WelcomeState(
+        command=":open https://huggingface.co/google-bert/bert-base-uncased",
+        command_mode=True,
+    )
+
+    result = execute_welcome_command(state)
+
+    assert result is not None
+    assert result.checkpoint_path == "https://huggingface.co/google-bert/bert-base-uncased"
+
+
 def test_welcome_help_command_stays_on_splash():
     state = WelcomeState(command=":help", command_mode=True)
 
@@ -77,3 +90,8 @@ def test_welcome_ascii_banner_spells_model_printer():
     assert len(WELCOME_ASCII) == 6
     assert "__  __" in banner
     assert "_ __  _ __" in banner
+
+
+def test_is_url_text_detects_http_urls():
+    assert is_url_text("https://huggingface.co/org/model")
+    assert not is_url_text("E:/models/model.npz")

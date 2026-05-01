@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/model-printer-hero.png" alt="Model Printer promotional banner" width="100%">
+  <img src="assets/model-printer-icon.svg" alt="Model Printer icon" width="112">
 </p>
 
 <h1 align="center">Model Printer</h1>
@@ -14,6 +14,10 @@
   <a href="https://github.com/Lcollection/Model_Printer/actions">CI</a>
 </p>
 
+<p align="center">
+  <img src="assets/model-printer-hero.png" alt="Model Printer promotional banner" width="100%">
+</p>
+
 Model Printer inspects model checkpoint files and turns parameter names and
 tensor shapes into a readable model hierarchy. It can print the structure in
 the terminal, browse it with a Vim-inspired TUI, compact repeated layers, and
@@ -26,6 +30,8 @@ model source code nearby.
 
 - Read PyTorch `.pth` / `.pt` checkpoints.
 - Read NumPy `.npz` weight archives.
+- Read Hugging Face model URLs directly.
+- Inspect online safetensors metadata without downloading full tensor data.
 - Automatically detect common checkpoint fields such as `state_dict`,
   `model_state_dict`, `model`, `net`, and `module`.
 - Strip the common DataParallel `module.` prefix by default.
@@ -40,8 +46,9 @@ model source code nearby.
 
 ## Installation
 
-The base install includes `numpy` and `rich`. It supports the welcome screen,
-the TUI, `.npz` files, and `.drawio` export.
+The base install includes `huggingface-hub`, `numpy`, and `rich`. It supports
+the welcome screen, the TUI, `.npz` files, Hugging Face safetensors metadata,
+and `.drawio` export.
 
 Windows PowerShell:
 
@@ -96,6 +103,12 @@ From the welcome screen, open a checkpoint with:
 :open /path/to/model.npz
 ```
 
+Or paste a Hugging Face model link:
+
+```text
+:open https://huggingface.co/google-bert/bert-base-uncased
+```
+
 On Windows, paths such as this work as well:
 
 ```text
@@ -106,6 +119,18 @@ Inspect a checkpoint in the TUI directly:
 
 ```bash
 model_printer /path/to/model.npz --tui
+```
+
+Inspect a Hugging Face model directly:
+
+```bash
+model_printer https://huggingface.co/google-bert/bert-base-uncased --tui
+```
+
+Direct Hugging Face file links are supported too:
+
+```bash
+model_printer https://huggingface.co/org/model/blob/main/model.safetensors
 ```
 
 Print the structure and export a draw.io diagram:
@@ -202,6 +227,28 @@ backbone/0/conv/weight -> backbone.0.conv.weight
 
 Object arrays and pickled values are intentionally not supported for `.npz`
 files. Model Printer uses `np.load(..., allow_pickle=False)`.
+
+## Hugging Face URLs
+
+Model Printer accepts Hugging Face model page URLs and direct file URLs:
+
+```bash
+model_printer https://huggingface.co/google-bert/bert-base-uncased --tui
+model_printer https://huggingface.co/org/model/resolve/main/model.safetensors
+model_printer https://huggingface.co/org/model/blob/main/pytorch_model.bin
+```
+
+When a repository contains safetensors files, Model Printer uses Hugging Face
+Hub metadata APIs to read tensor names, shapes, and dtypes without downloading
+the full weight tensors. This is the preferred path for large online models.
+
+For repositories that only provide `.bin`, `.pth`, or `.pt` weights, Model
+Printer downloads the selected file through the Hugging Face cache and then
+uses PyTorch to inspect it. Install PyTorch support first:
+
+```bash
+python -m pip install -e '.[pytorch]'
+```
 
 ## Platform Support
 

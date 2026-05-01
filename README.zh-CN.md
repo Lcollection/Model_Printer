@@ -15,6 +15,8 @@ ONNX / TorchScript 等带计算图的格式。
 
 - 读取 PyTorch `.pth` / `.pt` checkpoint。
 - 读取 NumPy `.npz` 权重归档。
+- 支持直接输入 Hugging Face 在线模型链接。
+- 对 Hugging Face safetensors 模型优先读取在线元数据，避免下载完整权重。
 - 自动识别常见 checkpoint 字段：`state_dict`、`model_state_dict`、`model`、
   `net`、`module` 等。
 - 支持 DataParallel 常见的 `module.` 前缀自动剥离。
@@ -26,8 +28,9 @@ ONNX / TorchScript 等带计算图的格式。
 
 ## 安装
 
-基础安装支持 Windows、macOS、Linux。基础依赖只包含 `numpy` 和 `rich`，
-可以打开 TUI、读取 `.npz`、导出 `.drawio`。
+基础安装支持 Windows、macOS、Linux。基础依赖包含 `huggingface-hub`、
+`numpy` 和 `rich`，可以打开 TUI、读取 `.npz`、读取 Hugging Face
+safetensors 元数据、导出 `.drawio`。
 
 Windows PowerShell：
 
@@ -76,6 +79,12 @@ model_printer
 :open E:\models\model.npz
 ```
 
+也可以直接输入 Hugging Face 模型链接：
+
+```text
+:open https://huggingface.co/google-bert/bert-base-uncased
+```
+
 也可以按 `o` 快速进入 `:open` 命令，或按 `q` 退出。
 
 查看 PyTorch 权重结构并导出 draw.io：
@@ -100,6 +109,12 @@ model_printer path\to\model.npz -o model.drawio
 
 ```powershell
 model_printer path\to\model.pth --tui
+```
+
+直接查看 Hugging Face 在线模型：
+
+```powershell
+model_printer https://huggingface.co/google-bert/bert-base-uncased --tui
 ```
 
 仅打印结构，不导出：

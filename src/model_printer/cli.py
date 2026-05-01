@@ -3,11 +3,17 @@
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
 from .drawio import export_drawio
-from .loader import CheckpointLoadError, load_state_dict
+from .loader import (
+    CheckpointLoadError,
+    is_huggingface_url,
+    load_state_dict,
+    parse_huggingface_reference,
+)
 from .tree import build_model_tree, compact_tree, format_param_count, render_text
 
 
@@ -80,10 +86,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "checkpoint",
         nargs="?",
-        type=Path,
         help=(
-            "Path to a .pth/.pt checkpoint, state_dict file, or .npz archive. "
-            "Omit it to open the Vim-like welcome screen."
+            "Path to a .pth/.pt checkpoint, state_dict file, .npz archive, or "
+            "Hugging Face model URL. Omit it to open the Vim-like welcome "
+            "screen."
         ),
     )
     parser.add_argument(
@@ -142,11 +148,26 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def default_output_path(checkpoint_path: Path) -> Path:
-    suffix = checkpoint_path.suffix
+def default_output_path(checkpoint_path: str | Path) -> Path:
+    checkpoint_ref = str(checkpoint_path)
+    if is_huggingface_url(checkpoint_ref):
+        reference = parse_huggingface_reference(checkpoint_ref)
+        if reference.filename:
+            stem = Path(reference.filename).stem
+        else:
+            stem = reference.repo_id.split("/")[-1]
+        return Path(f"{sanitize_filename_stem(stem)}.drawio")
+
+    path = Path(checkpoint_path)
+    suffix = path.suffix
     if suffix:
-        return checkpoint_path.with_suffix(".drawio")
-    return checkpoint_path.with_name(f"{checkpoint_path.name}.drawio")
+        return path.with_suffix(".drawio")
+    return path.with_name(f"{path.name}.drawio")
+
+
+def sanitize_filename_stem(value: str) -> str:
+    sanitized = re.sub(r"[^A-Za-z0-9_.-]+", "-", value).strip(".-")
+    return sanitized or "model"
 
 
 if __name__ == "__main__":

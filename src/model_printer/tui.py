@@ -7,6 +7,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
+from urllib.parse import urlparse
 
 from rich.align import Align
 from rich.console import Console, Group, RenderableType
@@ -47,7 +48,7 @@ class TuiState:
 
 @dataclass(frozen=True)
 class WelcomeResult:
-    checkpoint_path: Path | None = None
+    checkpoint_path: str | Path | None = None
 
 
 @dataclass
@@ -572,6 +573,8 @@ def execute_welcome_command(state: WelcomeState) -> WelcomeResult | None:
             if not path_text:
                 state.message = "Missing checkpoint path"
                 return None
+            if is_url_text(path_text):
+                return WelcomeResult(checkpoint_path=path_text)
             return WelcomeResult(checkpoint_path=Path(path_text).expanduser())
 
     if command:
@@ -691,3 +694,8 @@ def center_text(value: str, width: int) -> str:
     if width <= len(value):
         return value
     return value.center(width)
+
+
+def is_url_text(value: str) -> bool:
+    parsed = urlparse(value)
+    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
