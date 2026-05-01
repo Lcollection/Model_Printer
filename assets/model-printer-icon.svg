@@ -1,48 +1,37 @@
 <svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">Model Printer icon</title>
-  <desc id="desc">A compact model graph mark with an export sheet for Model Printer.</desc>
+  <desc id="desc">A clean model graph icon with a separate export arrow.</desc>
   <defs>
-    <linearGradient id="background" x1="40" y1="28" x2="216" y2="228" gradientUnits="userSpaceOnUse">
+    <linearGradient id="bg" x1="32" y1="24" x2="224" y2="232" gradientUnits="userSpaceOnUse">
       <stop stop-color="#0F172A"/>
-      <stop offset="0.56" stop-color="#123B4D"/>
-      <stop offset="1" stop-color="#065F46"/>
+      <stop offset="0.58" stop-color="#134E4A"/>
+      <stop offset="1" stop-color="#0B3B5A"/>
     </linearGradient>
-    <linearGradient id="accent" x1="58" y1="60" x2="198" y2="198" gradientUnits="userSpaceOnUse">
+    <linearGradient id="ring" x1="47" y1="42" x2="210" y2="218" gradientUnits="userSpaceOnUse">
       <stop stop-color="#38BDF8"/>
-      <stop offset="0.48" stop-color="#22C55E"/>
-      <stop offset="1" stop-color="#FACC15"/>
+      <stop offset="1" stop-color="#34D399"/>
     </linearGradient>
-    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
-      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#020617" flood-opacity="0.35"/>
-    </filter>
   </defs>
 
-  <rect x="18" y="18" width="220" height="220" rx="52" fill="url(#background)"/>
-  <rect x="28" y="28" width="200" height="200" rx="43" stroke="#38BDF8" stroke-opacity="0.42" stroke-width="3"/>
+  <rect x="18" y="18" width="220" height="220" rx="54" fill="url(#bg)"/>
+  <rect x="30" y="30" width="196" height="196" rx="44" stroke="url(#ring)" stroke-width="4" stroke-opacity="0.72"/>
 
-  <g filter="url(#softShadow)">
-    <path d="M72 92H113L128 122L143 92H184" stroke="#CBD5E1" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M72 92V164H104" stroke="#CBD5E1" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M184 92V164H152" stroke="#CBD5E1" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M104 164L128 132L152 164" stroke="#CBD5E1" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-  </g>
+  <path d="M128 75V113" stroke="#94A3B8" stroke-width="9" stroke-linecap="round"/>
+  <path d="M96 151H160" stroke="#94A3B8" stroke-width="9" stroke-linecap="round"/>
+  <path d="M128 113L96 151" stroke="#94A3B8" stroke-width="9" stroke-linecap="round"/>
+  <path d="M128 113L160 151" stroke="#94A3B8" stroke-width="9" stroke-linecap="round"/>
 
-  <g>
-    <circle cx="72" cy="92" r="18" fill="#020617" stroke="#38BDF8" stroke-width="7"/>
-    <circle cx="184" cy="92" r="18" fill="#020617" stroke="#22C55E" stroke-width="7"/>
-    <circle cx="128" cy="132" r="18" fill="#020617" stroke="#FACC15" stroke-width="7"/>
-    <circle cx="104" cy="164" r="18" fill="#020617" stroke="#A78BFA" stroke-width="7"/>
-    <circle cx="152" cy="164" r="18" fill="#020617" stroke="#FB7185" stroke-width="7"/>
-  </g>
+  <rect x="94" y="52" width="68" height="46" rx="17" fill="#020617" stroke="#38BDF8" stroke-width="6"/>
+  <rect x="60" y="151" width="72" height="48" rx="17" fill="#020617" stroke="#22C55E" stroke-width="6"/>
+  <rect x="124" y="151" width="72" height="48" rx="17" fill="#020617" stroke="#FACC15" stroke-width="6"/>
 
-  <path d="M64 56H98" stroke="url(#accent)" stroke-width="8" stroke-linecap="round"/>
-  <path d="M64 200H116" stroke="url(#accent)" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="128" cy="75" r="7" fill="#7DD3FC"/>
+  <circle cx="96" cy="175" r="7" fill="#86EFAC"/>
+  <circle cx="160" cy="175" r="7" fill="#FDE68A"/>
 
-  <g>
-    <path d="M163 183C163 176.925 167.925 172 174 172H201L220 191V213C220 219.075 215.075 224 209 224H174C167.925 224 163 219.075 163 213V183Z" fill="#F8FAFC"/>
-    <path d="M201 172V188C201 190.209 202.791 192 205 192H220" fill="#E2E8F0"/>
-    <path d="M201 172V188C201 190.209 202.791 192 205 192H220" stroke="#94A3B8" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M176 206H207" stroke="#0F172A" stroke-width="6" stroke-linecap="round"/>
-    <path d="M194 194L207 206L194 218" stroke="#0F172A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  </g>
+  <path d="M74 114H113" stroke="#E2E8F0" stroke-width="9" stroke-linecap="round"/>
+  <path d="M91 97L74 114L91 131" stroke="#E2E8F0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M178 98H203" stroke="#E2E8F0" stroke-width="9" stroke-linecap="round"/>
+  <path d="M192 85L205 98L192 111" stroke="#E2E8F0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
