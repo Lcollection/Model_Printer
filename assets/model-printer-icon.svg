@@ -19,14 +19,11 @@
   <rect x="18" y="18" width="220" height="220" rx="52" fill="url(#bg)"/>
   <rect x="30" y="30" width="196" height="196" rx="42" stroke="url(#edge)" stroke-width="4" stroke-opacity="0.68"/>
 
-  <!-- Input paper with a visible model graph. -->
+  <!-- Input model graph. -->
   <g filter="url(#shadow)">
-    <path d="M78 42C78 35.373 83.373 30 90 30H158L180 52V112C180 118.627 174.627 124 168 124H90C83.373 124 78 118.627 78 112V42Z" fill="#F8FAFC"/>
-    <path d="M158 30V48C158 51.314 160.686 54 164 54H180" fill="#E2E8F0"/>
-    <path d="M158 30V48C158 51.314 160.686 54 164 54H180" stroke="#94A3B8" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M112 66H146" stroke="#94A3B8" stroke-width="5" stroke-linecap="round"/>
-    <path d="M129 79V92" stroke="#94A3B8" stroke-width="5" stroke-linecap="round"/>
-    <path d="M104 96H154" stroke="#94A3B8" stroke-width="5" stroke-linecap="round"/>
+    <path d="M112 66H146" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>
+    <path d="M129 79V92" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>
+    <path d="M104 96H154" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>
     <rect x="94" y="56" width="34" height="22" rx="7" fill="#E0F2FE" stroke="#0284C7" stroke-width="3"/>
     <rect x="130" y="56" width="34" height="22" rx="7" fill="#DCFCE7" stroke="#16A34A" stroke-width="3"/>
     <rect x="99" y="90" width="34" height="22" rx="7" fill="#FEF3C7" stroke="#CA8A04" stroke-width="3"/>
@@ -42,12 +39,11 @@
     <rect x="119" y="143" width="58" height="10" rx="5" fill="#475569"/>
   </g>
 
-  <!-- Output paper with the exported architecture diagram. -->
+  <!-- Exported architecture diagram. -->
   <g filter="url(#shadow)">
-    <rect x="70" y="158" width="116" height="66" rx="11" fill="#F8FAFC"/>
-    <path d="M92 184H128" stroke="#94A3B8" stroke-width="5" stroke-linecap="round"/>
-    <path d="M128 184H164" stroke="#94A3B8" stroke-width="5" stroke-linecap="round"/>
-    <path d="M128 184V204" stroke="#94A3B8" stroke-width="5" stroke-linecap="round"/>
+    <path d="M92 184H128" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>
+    <path d="M128 184H164" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>
+    <path d="M128 184V204" stroke="#CBD5E1" stroke-width="5" stroke-linecap="round"/>
     <circle cx="92" cy="184" r="10" fill="#E0F2FE" stroke="#0284C7" stroke-width="4"/>
     <circle cx="128" cy="184" r="10" fill="#DCFCE7" stroke="#16A34A" stroke-width="4"/>
     <circle cx="164" cy="184" r="10" fill="#FEF3C7" stroke="#CA8A04" stroke-width="4"/>
