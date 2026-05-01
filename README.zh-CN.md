@@ -1,4 +1,8 @@
-# Model Printer
+<p align="center">
+  <img src="assets/model-printer-icon.svg" alt="Model Printer icon" width="112">
+</p>
+
+<h1 align="center">Model Printer</h1>
 
 > English documentation: [README.md](README.md)
 
