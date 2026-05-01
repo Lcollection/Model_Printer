@@ -1,156 +1,170 @@
-# Model Printer
+<p align="center">
+  <img src="assets/model-printer-hero.png" alt="Model Printer promotional banner" width="100%">
+</p>
 
-Model Printer 是一个模型结构查看器。它可以导入 PyTorch `.pth` / `.pt`
-权重文件或 NumPy `.npz` 权重文件，从参数名称和张量形状推断模型层级结构，并导出可在
-draw.io / diagrams.net 中继续编辑的 `.drawio` 架构图。
+<h1 align="center">Model Printer</h1>
 
-它适合处理只有权重文件、没有模型源码的情况。由于 `.pth` 权重通常不保存
-`stride`、`padding`、激活函数、forward 分支等完整动态图信息，本工具会尽量从参数
-形状和命名习惯中恢复结构；如果需要 100% 精确的 forward 图，仍然需要模型源码或
-ONNX / TorchScript 等带计算图的格式。
+<p align="center">
+  A lightweight model architecture viewer for checkpoint files.
+</p>
 
-## 功能
+<p align="center">
+  <a href="README.zh-CN.md">中文文档</a>
+  ·
+  <a href="https://github.com/Lcollection/Model_Printer/actions">CI</a>
+</p>
 
-- 读取 PyTorch `.pth` / `.pt` checkpoint。
-- 读取 NumPy `.npz` 权重归档。
-- 自动识别常见 checkpoint 字段：`state_dict`、`model_state_dict`、`model`、
-  `net`、`module` 等。
-- 支持 DataParallel 常见的 `module.` 前缀自动剥离。
-- 按参数键名生成层级树，展示每层参数形状和参数量。
-- 根据权重形状推断常见层类型，例如 `Conv2d`、`Linear`、`Embedding`、
-  `BatchNorm`、`LayerNorm`。
-- 对连续重复、结构相同的层进行简写，例如 `0..11 x12`。
-- 导出 `.drawio` 文件，可直接用 draw.io / diagrams.net 打开编辑。
+Model Printer inspects model checkpoint files and turns parameter names and
+tensor shapes into a readable model hierarchy. It can print the structure in
+the terminal, browse it with a Vim-inspired TUI, compact repeated layers, and
+export an editable `.drawio` diagram for diagrams.net / draw.io.
 
-## 安装
+It is useful when you have only a checkpoint file and do not have the original
+model source code nearby.
 
-基础安装支持 Windows、macOS、Linux。基础依赖只包含 `numpy` 和 `rich`，
-可以打开 TUI、读取 `.npz`、导出 `.drawio`。
+## Features
 
-Windows PowerShell：
+- Read PyTorch `.pth` / `.pt` checkpoints.
+- Read NumPy `.npz` weight archives.
+- Automatically detect common checkpoint fields such as `state_dict`,
+  `model_state_dict`, `model`, `net`, and `module`.
+- Strip the common DataParallel `module.` prefix by default.
+- Build a hierarchical model tree from parameter keys.
+- Show tensor shapes, parameter counts, direct parameters, and child modules.
+- Infer common layer summaries from tensor shapes, including `Conv2d`,
+  `Linear`, `Embedding`, `BatchNorm`, and `LayerNorm`.
+- Compact consecutive repeated sibling layers, for example `0..11 x12`.
+- Open an interactive TUI for browsing layers.
+- Export `.drawio` XML files that can be edited in draw.io / diagrams.net.
+- Support Windows, macOS, and Linux.
+
+## Installation
+
+The base install includes `numpy` and `rich`. It supports the welcome screen,
+the TUI, `.npz` files, and `.drawio` export.
+
+Windows PowerShell:
 
 ```powershell
 cd E:\github\modal_printer
 python -m pip install -e .
 ```
 
-macOS / Linux：
+macOS / Linux:
 
 ```bash
 cd /path/to/modal_printer
 python -m pip install -e .
 ```
 
-如果需要读取 PyTorch `.pth` / `.pt` 文件，请额外安装 PyTorch 支持：
+To read PyTorch `.pth` / `.pt` files, install the optional PyTorch extra:
 
-Windows PowerShell：
+Windows PowerShell:
 
 ```powershell
 python -m pip install -e ".[pytorch]"
 ```
 
-macOS / Linux：
+macOS / Linux:
 
 ```bash
 python -m pip install -e '.[pytorch]'
 ```
 
-如果你需要 CUDA、MPS 或特定 CPU 版本，请优先按照
-[PyTorch 官网](https://pytorch.org/) 给出的对应平台命令安装 `torch`。
+If you need CUDA, MPS, or a specific CPU build, install `torch` using the command
+recommended by the [PyTorch website](https://pytorch.org/), then install this
+project normally.
 
-## 使用
+## Quick Start
 
-项目安装后会提供两个等价命令：`model_printer` 和 `model-printer`。
+After installation, both commands are available:
 
-只输入命令会打开一个类似 Vim 的开屏界面：
+```bash
+model_printer
+model-printer
+```
 
-```powershell
+Run without arguments to open the Vim-like welcome screen:
+
+```bash
 model_printer
 ```
 
-在开屏界面中可以输入：
+From the welcome screen, open a checkpoint with:
 
 ```text
-:open E:\models\model.npz
+:open /path/to/model.npz
 ```
 
-也可以按 `o` 快速进入 `:open` 命令，或按 `q` 退出。
+On Windows, paths such as this work as well:
 
-查看 PyTorch 权重结构并导出 draw.io：
-
-```powershell
-model_printer path\to\model.pth -o model.drawio
+```text
+:open E:\models\model.pth
 ```
 
-macOS / Linux 路径示例：
+Inspect a checkpoint in the TUI directly:
+
+```bash
+model_printer /path/to/model.npz --tui
+```
+
+Print the structure and export a draw.io diagram:
 
 ```bash
 model_printer /path/to/model.pth -o model.drawio
 ```
 
-查看 NumPy `.npz` 权重结构并导出 draw.io：
+Only print the structure:
 
-```powershell
-model_printer path\to\model.npz -o model.drawio
+```bash
+model_printer /path/to/model.pth --no-drawio
 ```
 
-打开可视化 TUI 界面：
+Keep the `module.` prefix:
 
-```powershell
-model_printer path\to\model.pth --tui
+```bash
+model_printer /path/to/model.pth --keep-module-prefix
 ```
 
-仅打印结构，不导出：
+Strip a shared prefix:
 
-```powershell
-model_printer path\to\model.pth --no-drawio
+```bash
+model_printer /path/to/model.pth --strip-prefix backbone.
 ```
 
-保留 `module.` 前缀：
+Change the repeated-layer compaction threshold:
 
-```powershell
-model_printer path\to\model.pth --keep-module-prefix
+```bash
+model_printer /path/to/model.pth --min-repeat 3
 ```
 
-手动剥离某个统一前缀：
+Some older checkpoints contain pickled Python objects instead of a plain
+`state_dict`. By default, Model Printer prefers PyTorch's safer weights-only
+loading mode. If the file is trusted, you can enable unsafe pickle loading:
 
-```powershell
-model_printer path\to\model.pth --strip-prefix backbone.
+```bash
+model_printer /path/to/model.pth --unsafe-load
 ```
 
-调整重复层合并阈值，默认连续出现 2 个相同结构就合并：
+## TUI Keys
 
-```powershell
-model_printer path\to\model.pth --min-repeat 3
-```
+The `--tui` mode opens a terminal UI with a collapsible structure tree on the
+left and selected-layer details on the right.
 
-有些旧 checkpoint 保存了完整 Python 对象，而不是纯 `state_dict`。默认加载会优先使用
-PyTorch 的安全权重模式；如果你确认文件可信，可以启用非安全 pickle 加载：
+| Key | Action |
+| --- | --- |
+| `Up` / `Down` or `j` / `k` | Move selection |
+| `Enter` / `Space` | Expand or collapse the selected layer |
+| `Left` / `Right` or `h` / `l` | Collapse or expand |
+| `PageUp` / `PageDown` or `u` / `d` | Scroll faster |
+| `a` | Expand all |
+| `c` | Collapse to root |
+| `e` | Export the full structure to `.drawio` |
+| `q` | Quit |
 
-```powershell
-model_printer path\to\model.pth --unsafe-load
-```
+## Example Output
 
-## 平台支持
-
-Model Printer 目标支持：
-
-- Windows 10/11，PowerShell 或 Windows Terminal。
-- macOS，系统 Terminal、iTerm2 或其他支持 ANSI 的终端。
-- Linux，常见桌面终端或 SSH 终端。
-
-跨平台细节：
-
-- TUI 键盘读取在 Windows 使用 `msvcrt`，在 macOS / Linux 使用 `termios`。
-- 路径参数使用 Python `pathlib` 处理，Windows 的 `E:\models\model.pth`
-  和 POSIX 的 `/home/me/model.pth` 都可以。
-- CI 会在 `ubuntu-latest`、`macos-latest`、`windows-latest` 上运行测试。
-- 基础安装不强制安装 PyTorch，避免不同系统、Python 版本、CUDA 版本的 wheel
-  差异影响 `.npz` 和 TUI 功能。
-
-## 输出说明
-
-终端会输出类似结构：
+Terminal output looks like this:
 
 ```text
 Model [params=23.5M]
@@ -161,34 +175,75 @@ Model [params=23.5M]
       bn1: BatchNorm channels=64
 ```
 
-生成的 `.drawio` 文件可以直接拖入 draw.io / diagrams.net，或通过
-`File -> Open From -> Device` 打开。
+The generated `.drawio` file can be opened with diagrams.net / draw.io through
+`File -> Open From -> Device`, or by dragging the file into the editor.
 
-## TUI 快捷键
+## NPZ Format
 
-`--tui` 会打开一个基于终端的可视化浏览器。左侧是可折叠的模型结构树，右侧是当前
-选中层的参数形状、参数量、子层摘要和 draw.io 导出路径。
+For `.npz` files, each array should be saved with a parameter-like key:
 
-| 快捷键 | 功能 |
-| --- | --- |
-| `↑` / `↓` 或 `j` / `k` | 移动选中层 |
-| `Enter` / `Space` | 展开或折叠当前层 |
-| `←` / `→` 或 `h` / `l` | 折叠当前层或展开当前层 |
-| `PageUp` / `PageDown` 或 `u` / `d` | 快速翻动 |
-| `a` | 展开全部 |
-| `c` | 折叠到根节点 |
-| `e` | 导出当前完整结构为 `.drawio` |
-| `q` | 退出 |
+```python
+import numpy as np
 
-## 设计限制
+np.savez(
+    "model.npz",
+    **{
+        "stem.conv.weight": stem_weight,
+        "head.weight": head_weight,
+    },
+)
+```
 
-`.pth` 权重文件本质上通常只是参数表。本工具根据这些信息做静态推断，因此：
+Slash-separated keys are normalized automatically:
 
-- 可以可靠展示参数层级、参数形状、参数量。
-- 可以较好识别常见层类型。
-- 无法从普通 `state_dict` 中恢复没有参数的层，例如 `ReLU`、`Dropout`、`Flatten`。
-- 无法精确恢复所有 forward 分支、张量尺寸变化、skip connection 的真实连线。
-- `.npz` 文件需要把每个数组以参数名保存为 key，例如 `backbone.0.conv.weight`。
-  如果 key 使用 `/` 分隔，例如 `backbone/0/conv/weight`，工具会自动转成点号层级。
+```text
+backbone/0/conv/weight -> backbone.0.conv.weight
+```
 
-如果未来需要更完整的计算图，可以在此基础上增加 ONNX / Torch FX 导入器。
+Object arrays and pickled values are intentionally not supported for `.npz`
+files. Model Printer uses `np.load(..., allow_pickle=False)`.
+
+## Platform Support
+
+Model Printer targets:
+
+- Windows 10/11 with PowerShell or Windows Terminal.
+- macOS with Terminal, iTerm2, or another ANSI-capable terminal.
+- Linux desktop terminals and SSH terminals.
+
+Cross-platform details:
+
+- Windows keyboard input uses `msvcrt`.
+- macOS and Linux keyboard input uses `termios`.
+- Paths are handled with Python `pathlib`.
+- CI runs on `ubuntu-latest`, `macos-latest`, and `windows-latest`.
+- PyTorch is optional so `.npz` and TUI usage are not blocked by platform-
+  specific PyTorch wheels.
+
+## Limitations
+
+Plain checkpoint files usually store parameter tensors, not the full dynamic
+forward graph. Model Printer can reliably show parameter hierarchy, tensor
+shapes, parameter counts, and useful layer summaries, but it cannot recover
+everything.
+
+It cannot infer parameter-free layers such as `ReLU`, `Dropout`, or `Flatten`
+from a plain `state_dict`. It also cannot perfectly reconstruct all forward
+branches, skip connections, runtime tensor sizes, strides, or padding values.
+
+For a complete computational graph, future importers could be added for ONNX,
+TorchScript, or Torch FX.
+
+## Development
+
+Run tests:
+
+```bash
+python -m pytest -p no:cacheprovider
+```
+
+Compile-check the source:
+
+```bash
+python -m compileall src tests
+```
