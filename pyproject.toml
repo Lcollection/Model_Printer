@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "model-printer"
+version = "0.1.0"
+description = "Inspect PyTorch .pth or NumPy .npz checkpoints and export compact model architecture diagrams to draw.io."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Lcollection" }
+]
+dependencies = [
+  "numpy>=1.23",
+  "rich>=13"
+]
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Visualization",
+]
+
+[project.optional-dependencies]
+pytorch = [
+  "torch>=1.13"
+]
+dev = [
+  "pytest>=7"
+]
+
+[project.urls]
+Homepage = "https://github.com/Lcollection/Model_Printer"
+Repository = "https://github.com/Lcollection/Model_Printer"
+
+[project.scripts]
+model-printer = "model_printer.cli:main"
+model_printer = "model_printer.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
